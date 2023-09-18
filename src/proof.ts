@@ -34,9 +34,9 @@ export async function getExecutionStateRootProof(): Promise<Proof> {
     type: ProofType.single,
     gindex: EXECUTION_STATE_ROOT_GINDEX,
   }) as SingleProof;
- if (toHexString(createNodeFromProof(proof).root) !== blockRoot) {
-  throw new Error("Invalid proof")
- }
+  if (toHexString(createNodeFromProof(proof).root) !== blockRoot) {
+    throw new Error("Invalid proof")
+  }
 
   return proof;
 }
@@ -44,7 +44,7 @@ export async function getExecutionStateRootProof(): Promise<Proof> {
 getExecutionStateRootProof()
   .then((proof: SingleProof) => {
     const hexWitnesses = []
-    for (const witness of proof.witnesses.reverse()) {
+    for (const witness of proof.witnesses) {
       hexWitnesses.push(toHexString(witness))
     }
     console.log(hexWitnesses);

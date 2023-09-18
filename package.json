@@ -6,18 +6,18 @@
   },
   "dependencies": {
     "@chainsafe/bls": "7.1.1",
+    "@chainsafe/persistent-merkle-tree": "^0.6.1",
+    "@chainsafe/ssz": "^0.10.2",
     "@lodestar/api": "^1.9.2",
     "@lodestar/config": "^1.9.2",
     "@lodestar/light-client": "^1.9.2",
     "@lodestar/params": "^1.9.2",
     "@lodestar/types": "^1.9.2",
-    "@lodestar/utils": "^1.9.2",
-    "@chainsafe/persistent-merkle-tree": "^0.6.1",
-    "@chainsafe/ssz": "^0.10.2"
+    "@lodestar/utils": "^1.9.2"
   },
   "devDependencies": {
+    "@types/node": "^20.6.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.1.2"
   }
 }
-

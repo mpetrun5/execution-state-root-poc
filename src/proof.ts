@@ -1,10 +1,12 @@
-import {CompactMultiProof, computeDescriptor, Proof, ProofType, Tree} from "@chainsafe/persistent-merkle-tree";
+import {CompactMultiProof, computeDescriptor, createNodeFromProof, Proof, ProofType, SingleProof, Tree} from "@chainsafe/persistent-merkle-tree";
 import {toHexString} from "@chainsafe/ssz";
 import {getClient} from "@lodestar/api";
 import {config} from "@lodestar/config/default"
+import { ssz } from "@lodestar/types/bellatrix";
+import { hash, verifyMerkleBranch } from "@lodestar/utils";
 
 const BEACON_API_URL = "https://lodestar-mainnet.chainsafe.io";
-const EXECUTION_STATE_ROOT_GINDEX = BigInt(402);
+const EXECUTION_STATE_ROOT_GINDEX = BigInt(3218);
 const SLOT = 7330751;
 const ETHERSCAN_BLOCK = "https://etherscan.io/block/18142611";
 
@@ -28,18 +30,25 @@ export async function getExecutionStateRootProof(): Promise<Proof> {
     throw new Error(`Invalid execution state root ${toHexString(stateRootNode.root)} expected ${executionStateRoot}`);
   }
 
-  const proof = tree.getProof({
+  const proof: SingleProof = tree.getProof({
     type: ProofType.single,
     gindex: EXECUTION_STATE_ROOT_GINDEX,
-  });
+  }) as SingleProof;
+ if (toHexString(createNodeFromProof(proof).root) !== blockRoot) {
+  throw new Error("Invalid proof")
+ }
+
   return proof;
 }
 
 getExecutionStateRootProof()
-  .then((proof: Proof) => {
-    console.log(proof);
+  .then((proof: SingleProof) => {
+    const hexWitnesses = []
+    for (const witness of proof.witnesses.reverse()) {
+      hexWitnesses.push(toHexString(witness))
+    }
+    console.log(hexWitnesses);
   })
   .catch((e: Error) => {
     console.error(e);
   });
-
